@@ -1,5 +1,5 @@
 public class Solution {
-  int[] dp;
+  int[] dp; //메모리 정리
   public int climbStairs(int n) {
     if (n < 0) return 0;
     dp = new int[Math.max(n + 1, 3)];
