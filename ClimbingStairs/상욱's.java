@@ -1,4 +1,9 @@
 	//Factorial 정의
+	//재귀 이용 
+	// public static int ftl(int n) {
+	//	if (n == 1) return 1;
+	//	return n * n (n - 1);
+	// }
 	public static int ftl(int n){
 		int x = 1;
 		if(n == 0 || n == 1){
@@ -10,7 +15,7 @@
 			}
 		}
 		return x;
-
+	} // 빠진듯 .!?
 
 	//계단 오르는 갯수 구하기
 	public static int climbStairs(int n) {
@@ -27,6 +32,7 @@
 				x--;
 				y++;
 				y++;
+				// y += 2; 하셔도 괜찮 
 			}
 		}else{//짝수일때
 			int y = 0;
