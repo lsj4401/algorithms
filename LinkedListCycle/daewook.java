@@ -13,23 +13,18 @@ public class Solution {
     public boolean hasCycle(ListNode head) {
         if (head == null)
             return false;
-        
-        int res = 1 * compareWithNextNode(head, head.next);
-        
-        if (res == 0)
-            return true;
-        else
-            return false;
+
+        return compareWithNextNode(head, head.next);
     }
     
-    private int compareWithNextNode(ListNode first, ListNode node) {
-        if (node == null)
-            return 1;
+    private boolean compareWithNextNode(ListNode first, ListNode node) {
+        if (node == null || node.next = null)
+            return false;
         
         if (first == node.next)
-            return 0;
+            return true;
         else
-            return 1 * compareWithNextNode(first, node.next);
+            return compareWithNextNode(first.next, node.next.next);
         
     }
 }
