@@ -9,8 +9,7 @@ public class Solution {
   private int getIdx(int[] nums, int start, int end, int addValue, boolean isStart) {
     int idx = 0, max = Integer.MIN_VALUE, sum = 0;
     for (int i = start; i != end; i += addValue) {
-      if (sum < 0) sum = 0;
-      sum += nums[i];
+      sum = Math.max(nums[i], sum + nums[i]);
       if (max < sum || (max == sum && isStart)) {
         idx = i;
       }
