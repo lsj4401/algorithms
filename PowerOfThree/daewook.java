@@ -9,13 +9,7 @@ public class Solution {
         if (input == 1)
             return result;
 
-        int num = 0;
-        while (input > 0) {
-            num = num + (input % 10);
-            input = input / 10;
-        }
-
-        if(num % 3 == 0) {
+        if(n % 3 == 0) {
             input = n;
             while (input > 1) {
                 if(input % 3 == 0)
