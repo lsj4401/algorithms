@@ -5,6 +5,7 @@ class Solution(object):
         :rtype: int
         """
         res = 0
-        for idx in range(len(s)):
-            res += pow(26,len(s)-idx-1)*(ord(s[idx])-ord('A')+1)
+        strLen = len(s)
+        for idx in range(strLen):
+            res += pow(26,strLen-idx-1)*(ord(s[idx])-ord('A')+1)
         return res
