@@ -1,78 +1,77 @@
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 public class Main {
-  private static int minCount;
+  private static int min;
   private static int peopleCount;
+  private static Map<Integer, List<Integer>> peopleTable;
   private static Map<Integer, List<Integer>> foodTable;
-  private static int[] preparedFood;
   private static int[] whoAte;
   private static int ateCount;
-  private static int preparedFoodCount;
-  public static void main(String[] arg) throws IOException {
-    BufferedReader sc = new BufferedReader(new InputStreamReader(System.in));
-    int caseCount = Integer.parseInt(sc.readLine());
-    for (int i = 0; i < caseCount; i++) {
-      String[] count = sc.readLine().split(" ");
+  public static void main(String[] arg) {
+    Scanner sc = new Scanner(System.in);
+    int testCase = sc.nextInt();
+    for (int i = 0; i < testCase; i++) {
       ateCount = 0;
-      preparedFoodCount = 0;
-      peopleCount = Integer.parseInt(count[0]);
-      int foodCount = Integer.parseInt(count[1]);
-      preparedFood = new int[50];
+      min = Integer.MAX_VALUE;
+      peopleCount = sc.nextInt();
+      int foodCount = sc.nextInt();
+      whoAte = new int[50];
       foodTable = new HashMap<>();
+      peopleTable = new HashMap<>();
       
       Map<String, Integer> peopleMappingTabe = new HashMap<>();
-      String[] names = sc.readLine().split(" "); 
-      whoAte = new int[51];
       for (int j = 0; j < peopleCount; j++) {
-        peopleMappingTabe.put(names[j], j);
+        peopleMappingTabe.put(sc.next(), j);
       }
       
       for (int foodIdx = 0; foodIdx < foodCount; foodIdx++) {
-        String[] readLine = sc.readLine().split(" ");
-        int c = Integer.parseInt(readLine[0]);
+        int c = sc.nextInt();
         for (int j = 0; j < c; j++) {
+          Integer nameIdx = peopleMappingTabe.get(sc.next());
           List<Integer> canPeopleSet = foodTable.get(foodIdx);
           if (canPeopleSet == null) canPeopleSet = new ArrayList<>();
-          canPeopleSet.add(peopleMappingTabe.get(readLine[j + 1]));
+          canPeopleSet.add(nameIdx);
           foodTable.put(foodIdx, canPeopleSet);
+          List<Integer> foodList = peopleTable.get(nameIdx);
+          if (foodList == null) foodList = new ArrayList<>();
+          foodList.add(foodIdx);
+          peopleTable.put(nameIdx, foodList);
         }
       }
-      
-      minCount = Integer.MAX_VALUE;
-      calcMinFood(0);
-      System.out.println(minCount);
+      calcMinFood(0, 0, 0);
+      System.out.println(min);
     }
     sc.close();
   }
   
-  //모든 음식을 조합해서 조합 갯수가 가장 적은 count 를 찾는다
-  private static void calcMinFood(int startFoodIdx) {
-    if (preparedFoodCount >= minCount) return;
-    for (int foodIdx = startFoodIdx; foodIdx < foodTable.size(); foodIdx++) {
-      if (preparedFood[foodIdx] != 0 || foodTable.get(foodIdx) == null) continue;
-      if ((++preparedFood[foodIdx]) == 1) preparedFoodCount++;
-      
-      for (int name : foodTable.get(foodIdx)) {
-        if ((++whoAte[name]) == 1) ateCount++;
-      }
-      
-      if (peopleCount == ateCount) {
-        minCount = Math.min(minCount, preparedFoodCount);
-      } else {
-        calcMinFood(startFoodIdx + 1);
-      }
-      
-      for (int name : foodTable.get(foodIdx)) {
-        if ((--whoAte[name]) == 0) ateCount--;
-      }
-      if ((--preparedFood[foodIdx]) == 0) preparedFoodCount--;
+  //못먹는 사람을 골라서 음식을 만든다 
+  private static void calcMinFood(int nameIdx, int atePeopleCount, int foodCount) {
+    if (min < foodCount || peopleCount == atePeopleCount) {
+      min = Math.min(foodCount, min);
+      return;
     }
+    
+    for (int foodIdx : peopleTable.get(nameIdx)) {
+      for (int nameIdxByFood : foodTable.get(foodIdx)) {
+        if ((++whoAte[nameIdxByFood]) == 1) ateCount++;
+      }
+      
+      calcMinFood(doNotEat(), ateCount, foodCount + 1);
+      
+      for (int nameIdxByFood : foodTable.get(foodIdx)) {
+        if ((--whoAte[nameIdxByFood]) == 0) ateCount--;
+      }
+    }
+  }
+
+  private static int doNotEat() {
+    for (int nameIdx = 0; nameIdx < whoAte.length; nameIdx++) {
+      if (whoAte[nameIdx] == 0) return nameIdx;
+    }
+    return -1;
   }
 }
