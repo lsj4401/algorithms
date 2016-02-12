@@ -30,7 +30,7 @@ JongMan알고리즘 문제 해결 전략보기
 각 테스트 케이스마다 한 줄에 만들어야 할 최소의 음식 수를 출력합니다.
 
 예제 입력
-
+```
 2
 4 6
 cl bom dara minzy
@@ -48,9 +48,11 @@ a b c d e f g h i j
 3 b d g
 5 b c f h i
 4 b e g j
-5 b c g h i 
+5 b c g h i
+```
 예제 출력
-
+```
 2
 3
+```
 노트
