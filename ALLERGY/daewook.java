@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-public class Main {	
+public class Main {
 	private static Map<Integer, List<Integer>> peopleKeyTable = new HashMap<>();
 	private static Map<Integer, List<Integer>> foodKeyTable = new HashMap<>();
 	private static int notEatYetPeopleCount;
@@ -18,7 +18,10 @@ public class Main {
 
 	public static void main(String[] arg) throws IOException {
 		notEatYetPeopleList = new ArrayList<>();
-		try (Scanner sc = new Scanner(new File("/home/daewook/workspace/springStudy/algospot-allergy/src/input4.txt"))) {
+
+		try (Scanner sc = new Scanner(
+				new File("/home/daewook/workspace/springStudy/algospot-allergy/src/input3.txt"))) {
+			// Scanner sc = new Scanner(System.in);
 			int testCase = sc.nextInt();
 
 			for (int test = 0; test < testCase; test++) {
@@ -56,55 +59,62 @@ public class Main {
 				calculateMinFoodCountV2(0);
 
 				System.out.println(resultFoodCount);
-				System.out.println();
+				// System.out.println();
 			}
+
+			// sc.close();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 	}
 
-	private static void calculateMinFoodCountV2 (Integer peopleIndex) {		
+	private static void calculateMinFoodCountV2(Integer peopleIndex) {
 		if (notEatYetPeopleCount == 0 || peopleIndex < 0)
-			return;		
-		
+			return;
+
 		System.out.println(peopleIndex + "번째 사람");
-		int foodIndex = findFoodIndex(peopleIndex);	
+		int foodIndex = findFoodIndex(peopleIndex);
 		foodMadeYn[foodIndex] = 1;
 		eatYnChange(foodIndex);
-		
+
 		int nextpeopleIndex = findNextPeopleIndex();
 		resultFoodCount++;
 		System.out.println(resultFoodCount + "개의 음식을 먹음");
-		System.out.println();		
+		System.out.println();
 		calculateMinFoodCountV2(nextpeopleIndex);
 	}
-	
-	private static int findFoodIndex (Integer peopleIndex) {
+
+	private static int findFoodIndex(Integer peopleIndex) {
 		int result = -1;
 		int tmpNotEatFoodPeopleCnt = 0;
-		
+
 		notEatYetPeopleList.clear();
-		
+
 		for (int foodIndexOfpeople : peopleKeyTable.get(peopleIndex)) {
 			if (foodMadeYn[foodIndexOfpeople] == 1)
 				continue;
-			
+
 			for (int peopleIndexOfFood : foodKeyTable.get(foodIndexOfpeople)) {
 				if (peopleAteYn[peopleIndexOfFood] == 1)
 					continue;
-				
+
+				System.out.println(foodIndexOfpeople + "번째 음식, " + peopleIndexOfFood + "번째 사람이 아직 먹지 않음 ");
 				notEatYetPeopleList.add(peopleIndexOfFood);
 			}
-			if (tmpNotEatFoodPeopleCnt != Math.max(tmpNotEatFoodPeopleCnt, notEatYetPeopleList.size())) {
+
+			System.out.println(foodIndexOfpeople + "번째 음식, " + notEatYetPeopleList.size() + "명의 사람이 먹을 수 있음");
+
+			if (tmpNotEatFoodPeopleCnt < Math.max(tmpNotEatFoodPeopleCnt, notEatYetPeopleList.size())) {
 				tmpNotEatFoodPeopleCnt = Math.max(tmpNotEatFoodPeopleCnt, notEatYetPeopleList.size());
 				result = foodIndexOfpeople;
-			}				
+				break;
+			}
 		}
-		
+
 		System.out.println(result + "번째 음식을 시식");
 		return result;
 	}
-	
+
 	private static void eatYnChange(int foodIndex) {
 		for (int peopleIndex : foodKeyTable.get(foodIndex)) {
 			peopleAteYn[peopleIndex] = 1;
@@ -112,15 +122,15 @@ public class Main {
 			System.out.println(peopleIndex + "번째 사람이 함께 먹음");
 		}
 	}
-	
+
 	private static int findNextPeopleIndex() {
 		int result = -1;
-		
+
 		for (int i = 0; i < peopleAteYn.length; i++) {
 			if (peopleAteYn[i] == 0)
 				return i;
 		}
-		
+
 		return result;
 	}
 }
