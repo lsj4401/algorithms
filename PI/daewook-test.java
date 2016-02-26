@@ -270,19 +270,19 @@ public class MainTest {
 	@Test
 	public void finalTest() {
 		String testCase1 = "12341234";
-		assertEquals(4, pi.getMinGrade(testCase1));
+		assertEquals(4, pi.init(testCase1));
 		
 		String testCase2 = "11111222";
-		assertEquals(2, pi.getMinGrade(testCase2));
+		assertEquals(2, pi.init(testCase2));
 		
 		String testCase3 = "12122222";
-		assertEquals(5, pi.getMinGrade(testCase3));
+		assertEquals(5, pi.init(testCase3));
 		
 		String testCase4 = "22222222";
-		assertEquals(2, pi.getMinGrade(testCase4));
+		assertEquals(2, pi.init(testCase4));
 		
 		String testCase5 = "12673939";
-		assertEquals(14, pi.getMinGrade(testCase5));
+		assertEquals(14, pi.init(testCase5));
 	}
 
 }
