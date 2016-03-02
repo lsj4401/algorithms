@@ -14,10 +14,15 @@ public class Main {
 	
 	public static String getEncryptedString(String input) {
 		int inputLength = input.length();
-		char[] result = new char[inputLength+1];
+		char[] result = new char[inputLength];
+		int currentIndex = 0;
 		
-		for (int i = 0; i < inputLength; i++) {
-			result[i / 2 + (i % 2) * (inputLength / 2)] = input.charAt(i);
+		for (int i = 0; i < inputLength; i = i + 2) {			
+			result[currentIndex++] = input.charAt(i);
+		}
+		
+		for (int i = 1; i < inputLength; i = i + 2) {			
+			result[currentIndex++] = input.charAt(i);
 		}
 		
 		return String.valueOf(result);
