@@ -1,5 +1,4 @@
-package algospot.pi;
-
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
@@ -11,78 +10,49 @@ public class Main {
 		
 		for (int i = 0; i < testCase; i++) {
 			input = s.next();
-			init(input);
-			System.out.println(result);
+			System.out.println(init(input));
 		}
-		s.close();
-		
-//		try {
-//			Scanner s = new Scanner(new File("c:\\dev\\input2.txt"));
-//			
-//			int testCase = s.nextInt();
-//			String input = new String();
-//			
-//			for (int i = 0; i < testCase; i++) {
-//				input = s.next();
-//				init(input);
-//				System.out.println(result);
-//			}
-//			
-//			s.close();
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}		
+		s.close();		
 	}
 	
-	public static int[] grade3;
-	public static int[] grade4;
-	public static int[] grade5;
-	public static int result ;
+	public static int[] cache;
 	
-	public static void init(String input) {
-		grade3 = new int[input.length()];
-		grade4 = new int[input.length()];
-		grade5 = new int[input.length()];
-		
-		result = Integer.MAX_VALUE;
-		
-		getMinGrade(input, 0, 0);
-	}
+	public static int init(String input) {
+		cache = new int[10001];
+		Arrays.fill(cache, -1);
+		return getMinGrade(input, 0);
+	}	
 	
-	
-	public static void getMinGrade (String input, int index, int prevSum) {
+	public static int getMinGrade (String input, int index) {
 		int blockSize = 3;
 		int blockGrade = 0;
 		int len = input.length();
-		
-//		System.out.println("input length " + len + ", " + prevSum);
+		int minGrade = Integer.MAX_VALUE;
 		
 		if (len < 6 && len > 2) {
-			blockGrade += getBlockGrade(input, index);			
-			result = Math.min(result, prevSum + blockGrade);
-//			System.out.println("result " + result);
-			
-			return;
+			blockGrade += getBlockGrade(input, index);
+			cache[index] = blockGrade;
+			return blockGrade;
 		}
 
 		while (len - blockSize > 2 && blockSize < 6) {
-//			System.out.println();
-//			System.out.println("block size " + blockSize);
-			blockGrade = getBlockGrade(input.substring(0, blockSize), index);
-//			System.out.println(blockGrade);
-			getMinGrade(input.substring(blockSize, len), index + blockSize, prevSum + blockGrade);
-			blockSize++;
+			if(cache[index + blockSize] == -1) {				
+				blockGrade = getBlockGrade(input.substring(0, blockSize), index);				
+				blockGrade += getMinGrade(input.substring(blockSize, len), index + blockSize);
+			} else {
+				blockGrade += cache[index + blockSize];
+			}
+			
+			minGrade = Math.min(minGrade, blockGrade);
+			cache[index] = minGrade;
+			blockSize++;			
+			
 		}		
+		
+		return minGrade;
 	}
 	
-	public static int getBlockGrade (String input, int index) {
-		
-		Integer cachedGrade = null;
-		cachedGrade = getCachedGrade(input.length(), index);
-		
-		if (cachedGrade != null && cachedGrade != 0)
-			return cachedGrade;
-		
+	public static int getBlockGrade (String input, int index) {		
 		int subtract = input.charAt(1) - input.charAt(0);
 		int resultGrade = -1;
 		int prevGrade = -1;
@@ -112,35 +82,6 @@ public class Main {
 				resultGrade = 10;
 		}
 		
-		setGradeCache(resultGrade, input.length(), index);
-		
 		return resultGrade;
-	}
-	
-	public static  int getCachedGrade(int blockSize, int index) {
-		Integer cachedGrade = null;
-		
-		if (blockSize == 3)
-			cachedGrade = grade3[index];
-		else if (blockSize == 4)
-			cachedGrade = grade4[index];
-		else if (blockSize == 5)
-			cachedGrade = grade5[index];
-		
-		return cachedGrade;
-	}
-	
-	public static void setGradeCache(int grade, int blockSize, int index) {
-		switch(blockSize) {
-		case 3:
-			grade3[index] = grade;
-			break;
-		case 4:
-			grade4[index] = grade;
-			break;
-		case 5:
-			grade5[index] = grade;
-			break;			
-		}		
-	}
+	}	
 }
