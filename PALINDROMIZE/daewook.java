@@ -13,16 +13,27 @@ public class Main {
 	}	
 	
 	public static int getLengthOfPalindrome(String input) {
+		if (input == null)
+			return 0;
+		
 		int inputLength = input.length();
-		int duplicatedIndex = 0;
+		int addLength = -1;
 		
 		for(int i = 0; i < inputLength; i++) {
-			if (input.charAt(i) == input.charAt(inputLength - duplicatedIndex - 1))
-				duplicatedIndex++;
-			else
-				duplicatedIndex = 0;
+			if(isPalindrome(input, i, inputLength - 1))
+				addLength = i;
+			
+			if(addLength > -1)
+				break;
 		}
 		
-		return 2 * inputLength - duplicatedIndex;
+		return inputLength + addLength;
+	}
+	
+	public static boolean isPalindrome(String input, int start, int end) {
+		if(start >= end) return true;
+		
+		return input.charAt(start) == input.charAt(end)? 
+				isPalindrome(input, start + 1, end - 1) : false;
 	}
 }
