@@ -2,7 +2,7 @@ import java.util.Scanner;
 
 public class Main {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) {		
 		Scanner s = new Scanner(System.in);
 		int testCase = s.nextInt();
 		
@@ -17,23 +17,21 @@ public class Main {
 			return 0;
 		
 		int inputLength = input.length();
-		int addLength = -1;
+		int diff = 0;
+		int duplicatedLenth = 1;
 		
-		for(int i = 0; i < inputLength; i++) {
-			if(isPalindrome(input, i, inputLength - 1))
-				addLength = i;
+		for (int i = 0; i < inputLength; i++) {
+			diff ^= (input.charAt(inputLength - i - 1) - 'a' + 1); 
 			
-			if(addLength > -1)
-				break;
+			if(input.charAt(inputLength - 1) ==
+					input.charAt(inputLength - i - 1)) {
+				if((i % 2 == 0 && diff == input.charAt(inputLength - i / 2 - 1) - 'a' + 1 ) ||
+						(i % 2 != 0 && diff == 0)) {
+					duplicatedLenth = i + 1;
+				}
+			}
 		}
 		
-		return inputLength + addLength;
-	}
-	
-	public static boolean isPalindrome(String input, int start, int end) {
-		if(start >= end) return true;
-		
-		return input.charAt(start) == input.charAt(end)? 
-				isPalindrome(input, start + 1, end - 1) : false;
+		return inputLength + (inputLength - duplicatedLenth);
 	}
 }
