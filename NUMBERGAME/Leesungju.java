@@ -31,14 +31,14 @@ public class Main {
     if (rIdx - lIdx == 1) return Math.max(input[rIdx], input[lIdx]) - Math.min(input[rIdx], input[lIdx]);
     if (rIdx - lIdx == 0) return turnScore + input[lIdx];
     
-    int woast = Integer.MAX_VALUE;
-    woast = Math.min(woast, game(lIdx + 2, rIdx, aScore, bScore, !turn));
-    woast = Math.min(woast, game(lIdx, rIdx - 2, aScore, bScore, !turn));
-    woast = Math.min(woast, game(lIdx + 1, rIdx, aScore, bScore, !turn) - input[lIdx]);
-    woast = Math.min(woast, game(lIdx, rIdx - 1, aScore, bScore, !turn) - input[rIdx]);
+    int  worst = Integer.MAX_VALUE;
+    worst = Math.min(worst, game(lIdx + 2, rIdx, aScore, bScore, !turn));
+    worst = Math.min(worst, game(lIdx, rIdx - 2, aScore, bScore, !turn));
+    worst = Math.min(worst, game(lIdx + 1, rIdx, aScore, bScore, !turn) - input[lIdx]);
+    worst = Math.min(worst, game(lIdx, rIdx - 1, aScore, bScore, !turn) - input[rIdx]);
     
     check[lIdx][rIdx] = true;
     
-    return dp[lIdx][rIdx] = turnScore - woast;
+    return dp[lIdx][rIdx] = turnScore -  worst;
   }
 }
